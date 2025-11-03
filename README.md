@@ -34,3 +34,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Environment setup
+
+Create a `.env.local` file at the project root with:
+
+```
+MONGODB_URI="YOUR_MONGODB_CONNECTION_STRING"
+MONGODB_DB="ai_bookmark"
+```
+
+For example (from your provided details):
+
+```
+MONGODB_URI="mongodb+srv://bookmarkai:aibook2025@cluster0.0b7ezwy.mongodb.net/?appName=Cluster0"
+MONGODB_DB="ai_bookmark"
+```
+
+Restart the dev server after adding or changing `.env.local`.
