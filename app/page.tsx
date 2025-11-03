@@ -281,32 +281,42 @@ export default function Home() {
 
 
         {/* Filters */}
-        <div className="mb-6 flex flex-wrap items-center gap-3">
-          <div className="relative">
-            <select
-              className="appearance-none rounded-2xl border border-white/20 bg-black/60 px-4 pr-10 py-2 text-sm text-white/90 outline-none shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] backdrop-blur focus:border-fuchsia-400/40 focus:shadow-[0_0_0_3px_rgba(217,70,239,0.15)]"
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-            >
-            <option value="all">All types</option>
-            {typeOptions.map((t) => (
-              <option key={t} value={t}>{t[0].toUpperCase() + t.slice(1)}</option>
-            ))}
-            </select>
-            <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clipRule="evenodd"/></svg>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <select
+                className="appearance-none rounded-2xl border border-white/20 bg-black/60 px-4 pr-10 py-2 text-sm text-white/90 outline-none shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] backdrop-blur focus:border-fuchsia-400/40 focus:shadow-[0_0_0_3px_rgba(217,70,239,0.15)]"
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+              >
+                <option value="all">All types</option>
+                {typeOptions.map((t) => (
+                  <option key={t} value={t}>{t[0].toUpperCase() + t.slice(1)}</option>
+                ))}
+              </select>
+              <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clipRule="evenodd"/></svg>
+            </div>
+            <div className="relative">
+              <select
+                className="appearance-none rounded-2xl border border-white/20 bg-black/60 px-4 pr-10 py-2 text-sm text-white/90 outline-none shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] backdrop-blur focus:border-cyan-400/40 focus:shadow-[0_0_0_3px_rgba(34,211,238,0.15)]"
+                value={regionFilter}
+                onChange={(e) => setRegionFilter(e.target.value)}
+              >
+                <option value="all">All regions</option>
+                {regionOptions.map((r) => (
+                  <option key={r} value={r}>{r.toUpperCase()}</option>
+                ))}
+              </select>
+              <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clipRule="evenodd"/></svg>
+            </div>
           </div>
-          <div className="relative">
-            <select
-              className="appearance-none rounded-2xl border border-white/20 bg-black/60 px-4 pr-10 py-2 text-sm text-white/90 outline-none shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] backdrop-blur focus:border-cyan-400/40 focus:shadow-[0_0_0_3px_rgba(34,211,238,0.15)]"
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-            >
-            <option value="all">All regions</option>
-            {regionOptions.map((r) => (
-              <option key={r} value={r}>{r.toUpperCase()}</option>
-            ))}
-            </select>
-            <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clipRule="evenodd"/></svg>
+          <div className="w-full sm:w-[280px]">
+            <input
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none placeholder:text-white/40 focus:border-violet-400/40"
+              placeholder="Search..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </div>
         </div>
 
@@ -338,8 +348,16 @@ export default function Home() {
         )}
 
         {/* Bottom Controls */}
-        <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <form onSubmit={onAdd} className="col-span-2 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-4">
+          <div className="sm:col-span-1 flex items-stretch">
+            <a
+              href="/dashboard"
+              className="inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base text-white hover:bg-white/10 backdrop-blur"
+            >
+              Dashboard
+            </a>
+          </div>
+          <form onSubmit={onAdd} className="col-span-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
             <input
               className="col-span-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base outline-none placeholder:text-white/40 focus:border-cyan-400/40"
               placeholder="Name (e.g., Midjourney)"
@@ -354,27 +372,11 @@ export default function Home() {
             />
             <button
               type="submit"
-              className="col-span-1 group relative inline-flex items-center justify-center rounded-full px-6 py-3 text-base font-semibold text-white transition focus:outline-none"
+              className="col-span-1 inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base text-white hover:bg-white/10 backdrop-blur"
             >
-              <span className="absolute inset-0 rounded-full bg-gradient-to-r from-fuchsia-500 via-violet-500 to-cyan-400 opacity-90 group-hover:opacity-100" />
-              <span className="absolute inset-0 rounded-full blur-lg bg-gradient-to-r from-fuchsia-500/60 via-violet-500/60 to-cyan-400/60 opacity-40 group-hover:opacity-60" />
-              <span className="relative">Add Bookmark</span>
+              Add Bookmark
             </button>
           </form>
-          <div className="sm:col-span-1 flex items-center gap-3">
-            <input
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base outline-none placeholder:text-white/40 focus:border-violet-400/40"
-              placeholder="Search..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <a
-              href="/dashboard"
-              className="hidden sm:inline-flex items-center whitespace-nowrap rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10 backdrop-blur"
-            >
-              Dashboard
-            </a>
-          </div>
         </div>
       </main>
     </div>
