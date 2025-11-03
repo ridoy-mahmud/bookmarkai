@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { email, password } = body as { email?: string; password?: string };
-    if (email === "ridoy@gmail.com" && password === "ridoy007") {
+    if (email === "ridoy@email.com" && password === "ridoy007") {
       const res = NextResponse.json({ ok: true });
       res.cookies.set("admin", "1", { httpOnly: true, sameSite: "lax", path: "/" });
       return res;

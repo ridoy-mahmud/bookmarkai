@@ -4,10 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { BookmarkCard, type Bookmark } from "./components/BookmarkCard";
 import { PixelBlast } from "./components/PixelBlast";
 import { useRouter } from "next/navigation";
+import { Spinner } from "./components/Spinner";
 
 export default function Home() {
   const router = useRouter();
   const [bookmarks, setBookmarks] = useState<(Bookmark & { id?: string })[]>([]);
+  const [loading, setLoading] = useState(true);
+  const CACHE_KEY = "ai-bookmark:cache:v2";
   const [query, setQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [regionFilter, setRegionFilter] = useState<string>("all");
@@ -18,13 +21,35 @@ export default function Home() {
   // Load from API (auto-seeds on server if empty)
   useEffect(() => {
     (async () => {
+      // 1) Try local cache first for instant paint
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed)) {
+            setBookmarks(parsed);
+            setLoading(false);
+          }
+        }
+      } catch {}
+
+      // 2) Fetch fresh data in background and replace
       try {
         const res = await fetch("/api/bookmarks", { cache: "no-store" });
         const data = await res.json();
-        if (Array.isArray(data)) setBookmarks(data);
+        if (Array.isArray(data)) {
+          setBookmarks(data);
+          try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {}
+        }
       } catch {}
+      setLoading(false);
     })();
   }, []);
+
+  // Persist any later changes to localStorage (e.g., reorder, add)
+  useEffect(() => {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(bookmarks)); } catch {}
+  }, [bookmarks]);
 
   // Ensure specific ordering and presence: Gemini at 2, Grok at 4, NotebookLM at 6
   const ensuredRef = useRef(false);
@@ -284,7 +309,9 @@ export default function Home() {
           AI Tools
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <Spinner label="Loading bookmarks" />
+        ) : filtered.length === 0 ? (
           <div className="mt-10 rounded-2xl border border-dashed border-white/15 bg-white/5 p-8 text-center text-white/60">
             No bookmarks found. Try resetting to the top 20 or clearing your search.
           </div>
@@ -327,13 +354,19 @@ export default function Home() {
               <span className="relative">Add Bookmark</span>
             </button>
           </form>
-          <div className="sm:col-span-1">
+          <div className="sm:col-span-1 flex items-center gap-3">
             <input
               className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base outline-none placeholder:text-white/40 focus:border-violet-400/40"
               placeholder="Search..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
+            <a
+              href="/dashboard"
+              className="hidden sm:inline-flex items-center whitespace-nowrap rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10 backdrop-blur"
+            >
+              Dashboard
+            </a>
           </div>
         </div>
       </main>
