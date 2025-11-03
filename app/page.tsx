@@ -12,6 +12,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const CACHE_KEY = "ai-bookmark:cache:v2";
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [regionFilter, setRegionFilter] = useState<string>("all");
   const [name, setName] = useState("");
@@ -45,6 +46,12 @@ export default function Home() {
       setLoading(false);
     })();
   }, []);
+
+  // debounce search input
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query), 150);
+    return () => clearTimeout(t);
+  }, [query]);
 
   // Persist any later changes to localStorage (e.g., reorder, add)
   useEffect(() => {
@@ -114,7 +121,7 @@ export default function Home() {
   }, [bookmarks]);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     let base = bookmarks;
     if (typeFilter !== "all") {
       base = base.filter((b) => (b.type || "").toLowerCase() === typeFilter);
@@ -124,7 +131,7 @@ export default function Home() {
     }
     if (!q) return base;
     return base.filter((b) => `${b.name} ${b.url} ${b.type ?? ""}`.toLowerCase().includes(q));
-  }, [bookmarks, query, typeFilter, regionFilter]);
+  }, [bookmarks, debouncedQuery, typeFilter, regionFilter]);
 
   const typeOptions = useMemo(() => {
     const set = new Set<string>();

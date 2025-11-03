@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 
 export type Bookmark = {
   name: string;
@@ -18,7 +18,7 @@ function extractDomain(inputUrl: string): string {
   }
 }
 
-export function BookmarkCard({
+function BookmarkCardBase({
   bookmark,
   onRemove,
   draggable,
@@ -127,5 +127,7 @@ export function BookmarkCard({
     </div>
   );
 }
+
+export const BookmarkCard = memo(BookmarkCardBase);
 
 

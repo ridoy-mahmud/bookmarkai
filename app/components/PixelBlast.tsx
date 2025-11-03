@@ -27,15 +27,17 @@ export function PixelBlast({
 }) {
   const tint = color;
   const gridSize = Math.max(12, Math.min(48, patternScale * 12));
+  const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" style={{ backgroundColor: transparent ? "transparent" : "black" }}>
       <div
-        className="absolute inset-0 opacity-85"
+        className="absolute inset-0"
         style={{
           background:
             `radial-gradient(1200px 600px at 50% -10%, ${tint}44, transparent),` +
             `radial-gradient(900px 500px at 85% 20%, rgba(130,90,210,0.28), transparent),` +
             `radial-gradient(700px 400px at 15% 10%, rgba(90,40,160,0.28), transparent)`,
+          opacity: prefersReducedMotion ? 0.5 : 0.85,
         }}
       />
       <div
@@ -47,13 +49,15 @@ export function PixelBlast({
           maskImage: "radial-gradient(circle at 50% 40%, black, transparent 70%)",
         }}
       />
-      <div
-        className="absolute inset-0 animate-[twinkle_6s_linear_infinite]"
-        style={{
-          backgroundImage:
-            "radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.35), transparent), radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,0.35), transparent), radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.35), transparent), radial-gradient(2px 2px at 80% 75%, rgba(255,255,255,0.35), transparent)",
-        }}
-      />
+      {!prefersReducedMotion && (
+        <div
+          className="absolute inset-0 animate-[twinkle_6s_linear_infinite]"
+          style={{
+            backgroundImage:
+              "radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.35), transparent), radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,0.35), transparent), radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.35), transparent), radial-gradient(2px 2px at 80% 75%, rgba(255,255,255,0.35), transparent)",
+          }}
+        />
+      )}
       <style>{`
         @keyframes twinkle { 0%, 100% { opacity: .4 } 50% { opacity: .8 } }
       `}</style>
